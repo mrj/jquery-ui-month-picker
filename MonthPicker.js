@@ -758,7 +758,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
                 $('button:lt(' + _hideBelowThresh + ')', _monthTable).toggle(false);
               }
             }
-            this._highlightMonth(year);
+            this._highlightMonth(toYearPicker ? NaN : year);
         },
         
         _highlightMonth: function (year) {
