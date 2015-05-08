@@ -20,8 +20,6 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
     var _speed = 500;
     var _disabledClass = 'month-picker-disabled';
     var _inputMask = '99/9999';
-    var _earliestYear,_earliestMonth;
-    var _latestYear, _latestMonth;
     
     $.MonthPicker = {
         i18n: {
@@ -507,22 +505,22 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
         
          _setEarliestMonthSelectable: function () {
              if (this.options.EarliestMonthSelectable) {
-                _earliestYear = this._validateYear(this.options.EarliestMonthSelectable);
-                _earliestMonth = this._validateMonth(this.options.EarliestMonthSelectable);
-                 if (isNaN(_earliestYear) || isNaN(_earliestMonth)) {
-                  _earliestYear = -9999;
-                  _earliestMonth = 0;
+                this._earliestYear = this._validateYear(this.options.EarliestMonthSelectable);
+                this._earliestMonth = this._validateMonth(this.options.EarliestMonthSelectable);
+                 if (isNaN(this._earliestYear) || isNaN(this._earliestMonth)) {
+                  this._earliestYear = -9999;
+                  this._earliestMonth = 0;
                  }
              }
         },   
         
         _setLatestMonthSelectable: function () {
             if (this.options.LatestMonthSelectable) {
-                _latestYear = this._validateYear(this.options.LatestMonthSelectable);
-                _latestMonth = this._validateMonth(this.options.LatestMonthSelectable);
-                 if (isNaN(_latestYear) || isNaN(_latestMonth)) {
-                  _latestYear = 9999;
-                  _latestMonth = 12;
+                this._latestYear = this._validateYear(this.options.LatestMonthSelectable);
+                this._latestMonth = this._validateMonth(this.options.LatestMonthSelectable);
+                 if (isNaN(this._latestYear) || isNaN(this._latestMonth)) {
+                  this._latestYear = 9999;
+                  this._latestMonth = 12;
                  }
             }
         },   
@@ -738,23 +736,23 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
         },
         
         _setYear: function(year, toYearPicker) {
-            if (_earliestYear != -9999 || _latestYear != 9999) {
+            if (this._earliestYear != -9999 || this._latestYear != 9999) {
               var _monthTable = $('.month-picker-month-table', this._monthPickerMenu);
               $('button', _monthTable).toggle(true);
   
-              var _showNextPageButton = year+(toYearPicker ? 8 : 0) < _latestYear;
+              var _showNextPageButton = year+(toYearPicker ? 8 : 0) < this._latestYear;
               this._setVisibility('next-year', _showNextPageButton);
               
               if (!_showNextPageButton) {
-                var _hideAboveThresh = toYearPicker ? _latestYear-year+4 : _latestMonth-1;
+                var _hideAboveThresh = toYearPicker ? this._latestYear-year+4 : this._latestMonth-1;
                 $('button:gt(' + _hideAboveThresh + ')', _monthTable).toggle(false);
               }
   
-              var _showPreviousPageButton = year-(toYearPicker ? 4 : 0) > _earliestYear;
+              var _showPreviousPageButton = year-(toYearPicker ? 4 : 0) > this._earliestYear;
               this._setVisibility('previous-year', _showPreviousPageButton);
   
               if (!_showPreviousPageButton) {
-                var _hideBelowThresh = toYearPicker ? _earliestYear-year+4 : _earliestMonth-1;
+                var _hideBelowThresh = toYearPicker ? this._earliestYear-year+4 : this._earliestMonth-1;
                 $('button:lt(' + _hideBelowThresh + ')', _monthTable).toggle(false);
               }
             }
