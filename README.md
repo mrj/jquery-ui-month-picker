@@ -6,7 +6,7 @@ for date validation, setting the start year, setting the earliest and latest dat
 using an icon button, input masking, internationalization and localization and more.</p>
  
 -See a demo with unit tests running on jsFiddle at...
--http://jsfiddle.net/rbate/L5qr28d0/
+-http://jsfiddle.net/rbate/L5qr28d0/13
 
 <h2>Prerequisites</h2>
 <p>This plugin has been tested using the following configuration.</p>
