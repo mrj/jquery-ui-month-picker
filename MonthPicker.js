@@ -204,11 +204,11 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
                     break;
                 case 'EarliestMonthSelectable':
                     this.options.EarliestMonthSelectable = value;
-                    this._setEarliestMonthSelectable();
+                    this._setEarliestMonthSelectable(this._getPickerYear());
                     break;
                 case 'LatestMonthSelectable':
                     this.options.LatestMonthSelectable = value;
-                    this._setLatestMonthSelectable();
+                    this._setLatestMonthSelectable(this._getPickerYear());
                     break;
                 case 'ShowIcon':
                     this.options.ShowIcon = value;
@@ -434,8 +434,8 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             
             this._showMonths();
             this._setPickerYear(_year);
-            this._setEarliestMonthSelectable();
-            this._setLatestMonthSelectable();
+            this._setEarliestMonthSelectable(_year);
+            this._setLatestMonthSelectable(_year);
 
             if (this._monthPickerMenu.css('display') === 'none') {
                 var _fieldIsHidden = this.element.is(':hidden');
@@ -508,30 +508,28 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             }
         },
         
-         _setEarliestMonthSelectable: function () {
+         _setEarliestMonthSelectable: function (year) {
              if (this.options.EarliestMonthSelectable) {
                  this.options._earliestYear = this._validateYear(this.options.EarliestMonthSelectable);
                  this.options._earliestMonth = this._validateMonth(this.options.EarliestMonthSelectable);
                  if (isNaN(this.options._earliestYear) || isNaN(this.options._earliestMonth)) {
                      this.options._earliestYear = -9999;
                      this.options._earliestMonth = 0;
-                 } else {
-                     var _year = this.GetSelectedYear();
-                     if (_year <= this.options._earliestYear) this._setPickerYear(this.options._earliestYear);
+                 } else if (year <= this.options._earliestYear) {
+                     this._setPickerYear(this.options._earliestYear);
                  }
              }
         },   
         
-        _setLatestMonthSelectable: function () {
+        _setLatestMonthSelectable: function (year) {
             if (this.options.LatestMonthSelectable) {
                 this.options._latestYear = this._validateYear(this.options.LatestMonthSelectable);
                 this.options._latestMonth = this._validateMonth(this.options.LatestMonthSelectable);
                 if (isNaN(this.options._latestYear) || isNaN(this.options._latestMonth)) {
                     this.options._latestYear = 9999;
                     this.options._latestMonth = 12;
-                 } else {
-                    var _year = this.GetSelectedYear();
-                    if (_year >= this.options._latestYear) this._setPickerYear(this.options._latestYear);
+                 } else if (year >= this.options._latestYear) {
+                    this._setPickerYear(this.options._latestYear);
                  }
             }
         },
