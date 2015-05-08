@@ -109,6 +109,15 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
         _yearContainer: null,
         
         _isMonthInputType: null,
+        
+        _earliestYear: null,
+         
+        _earliestMonth: null,
+          
+        _latestYear: null,
+         
+        _latestMonth: null,
+
 
         _enum: {
             _overrideStartYear: 'MonthPicker_OverrideStartYear'
@@ -432,8 +441,9 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             this._setPickerYear(_year);
 
             if (this._monthPickerMenu.css('display') === 'none') {
-                var _top = this.element.offset().top + this.element.height() + 7;
-                var _left = this.element.offset().left;
+                var _anchor = this.element.is(':visible') ? this.element : this.element.parent();
+                var _top = _anchor.offset().top + this.element.height() + 7;
+                var _left = _anchor.offset().left;
 
                 this._monthPickerMenu.css({
                     top: _top + 'px',
@@ -523,8 +533,8 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
                   this._latestMonth = 12;
                  }
             }
-        },   
-
+        },
+        
         _getPickerYear: function () {
             return parseInt(this._yearContainer.text(), 10);
         },
