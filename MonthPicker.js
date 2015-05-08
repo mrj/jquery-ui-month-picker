@@ -1,7 +1,7 @@
 /*
 https://github.com/KidSysco/jquery-ui-month-picker/
 
-Version 2.2
+Version 2.2mrj
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
@@ -97,7 +97,12 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             OnAfterChooseMonth: null,
             OnAfterChooseYear: null,
             OnAfterChooseYears: null,
-            OnAfterChooseMonths: null
+            OnAfterChooseMonths: null,
+            
+            _earliestYear: -9999,
+            _earliestMonth: null,
+            _latestYear: 9999,
+            _latestMonth: null
         },
 
         _monthPickerMenu: null,
@@ -110,15 +115,6 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
         
         _isMonthInputType: null,
         
-        _earliestYear: null,
-         
-        _earliestMonth: null,
-          
-        _latestYear: null,
-         
-        _latestMonth: null,
-
-
         _enum: {
             _overrideStartYear: 'MonthPicker_OverrideStartYear'
         },
@@ -259,8 +255,6 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             this.element.addClass('month-year-input');
 
             this._setStartYear();
-            this._setEarliestMonthSelectable();
-            this._setLatestMonthSelectable();
 
             this._monthPickerMenu = $('<div id="MonthPicker_' + this.element.attr('id') + '" class="month-picker ui-helper-clearfix"></div>');
 
@@ -302,7 +296,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             this._monthPickerMenu.bind('click.MonthPicker', function (event) {
                 return false;
             });
-
+            
             this._setUseInputMask();
             this._setDisabledState();
             
@@ -438,7 +432,10 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
                 _year = new Date().getFullYear();
             }
             
+            this._showMonths();
             this._setPickerYear(_year);
+            this._setEarliestMonthSelectable();
+            this._setLatestMonthSelectable();
 
             if (this._monthPickerMenu.css('display') === 'none') {
                 var _fieldIsHidden = this.element.is(':hidden');
@@ -456,9 +453,6 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
                     }
                 }, this));
             }
-
-            this._showMonths();
-            this._setYear(_year);
 
             return false;
         },
@@ -516,22 +510,28 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
         
          _setEarliestMonthSelectable: function () {
              if (this.options.EarliestMonthSelectable) {
-                this._earliestYear = this._validateYear(this.options.EarliestMonthSelectable);
-                this._earliestMonth = this._validateMonth(this.options.EarliestMonthSelectable);
-                 if (isNaN(this._earliestYear) || isNaN(this._earliestMonth)) {
-                  this._earliestYear = -9999;
-                  this._earliestMonth = 0;
+                 this.options._earliestYear = this._validateYear(this.options.EarliestMonthSelectable);
+                 this.options._earliestMonth = this._validateMonth(this.options.EarliestMonthSelectable);
+                 if (isNaN(this.options._earliestYear) || isNaN(this.options._earliestMonth)) {
+                     this.options._earliestYear = -9999;
+                     this.options._earliestMonth = 0;
+                 } else {
+                     var _year = this.GetSelectedYear();
+                     if (_year <= this.options._earliestYear) this._setPickerYear(this.options._earliestYear);
                  }
              }
         },   
         
         _setLatestMonthSelectable: function () {
             if (this.options.LatestMonthSelectable) {
-                this._latestYear = this._validateYear(this.options.LatestMonthSelectable);
-                this._latestMonth = this._validateMonth(this.options.LatestMonthSelectable);
-                 if (isNaN(this._latestYear) || isNaN(this._latestMonth)) {
-                  this._latestYear = 9999;
-                  this._latestMonth = 12;
+                this.options._latestYear = this._validateYear(this.options.LatestMonthSelectable);
+                this.options._latestMonth = this._validateMonth(this.options.LatestMonthSelectable);
+                if (isNaN(this.options._latestYear) || isNaN(this.options._latestMonth)) {
+                    this.options._latestYear = 9999;
+                    this.options._latestMonth = 12;
+                 } else {
+                    var _year = this.GetSelectedYear();
+                    if (_year >= this.options._latestYear) this._setPickerYear(this.options._latestYear);
                  }
             }
         },
@@ -542,6 +542,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 
         _setPickerYear: function (year) {
             this._yearContainer.text(year);
+            this._setYear(year);
         },
 
         _validateMonth: function (text) {
@@ -620,7 +621,6 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
         _chooseYear: function (year) {
             this._setPickerYear(year);
             this._showMonths();
-            this._setYear(year);
             if (this._isFunction(this.options.OnAfterChooseYear)) {
                 this.options.OnAfterChooseYear();
             }
@@ -747,23 +747,23 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
         },
         
         _setYear: function(year, toYearPicker) {
-            if (this._earliestYear != -9999 || this._latestYear != 9999) {
+            if (this.options._earliestYear != -9999 || this.options._latestYear != 9999) {
               var _monthTable = $('.month-picker-month-table', this._monthPickerMenu);
               $('button', _monthTable).toggle(true);
   
-              var _showNextPageButton = year+(toYearPicker ? 8 : 0) < this._latestYear;
+              var _showNextPageButton = year+(toYearPicker ? 8 : 0) < this.options._latestYear;
               this._setVisibility('next-year', _showNextPageButton);
               
               if (!_showNextPageButton) {
-                var _hideAboveThresh = toYearPicker ? this._latestYear-year+4 : this._latestMonth-1;
+                var _hideAboveThresh = toYearPicker ? this.options._latestYear-year+4 : this.options._latestMonth-1;
                 $('button:gt(' + _hideAboveThresh + ')', _monthTable).toggle(false);
               }
   
-              var _showPreviousPageButton = year-(toYearPicker ? 4 : 0) > this._earliestYear;
+              var _showPreviousPageButton = year-(toYearPicker ? 4 : 0) > this.options._earliestYear;
               this._setVisibility('previous-year', _showPreviousPageButton);
   
               if (!_showPreviousPageButton) {
-                var _hideBelowThresh = toYearPicker ? this._earliestYear-year+4 : this._earliestMonth-1;
+                var _hideBelowThresh = toYearPicker ? this.options._earliestYear-year+4 : this.options._earliestMonth-1;
                 $('button:lt(' + _hideBelowThresh + ')', _monthTable).toggle(false);
               }
             }
