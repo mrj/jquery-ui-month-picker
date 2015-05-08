@@ -751,7 +751,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
               var _monthTable = $('.month-picker-month-table', this._monthPickerMenu);
               $('button', _monthTable).toggle(true);
   
-              var _showNextPageButton = year+(toYearPicker ? 8 : 0) < this.options._latestYear;
+              var _showNextPageButton = year+(toYearPicker ? 7 : 0) < this.options._latestYear;
               this._setVisibility('next-year', _showNextPageButton);
               
               if (!_showNextPageButton) {
