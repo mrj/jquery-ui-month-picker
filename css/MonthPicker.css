@@ -69,6 +69,9 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
     text-align: center;
     font-size: 12px;
 }
+ .month-picker button.selected {
+   background: #98db40;
+}
 .month-picker-open-button {
     height: 20px;
     width: 20px;

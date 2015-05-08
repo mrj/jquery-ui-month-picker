@@ -1,11 +1,12 @@
-<h1>The jQuery UI Month Picker Version 2.2</h1>
+<h1>The jQuery UI Month Picker Version 2.2mrj</h1>
 <p>The jQuery UI Month Picker Plugin is designed to allow user input for only a month and year when only that input is 
-required. Clicking on the year, allows the user to jump ahead or back 5 years at a time. Clicking anywhere on the 
+required. Clicking on the year, allows the user to jump ahead or back 5 years at a time. By default, clicking anywhere on the 
 page, except on the month picker menu itself, will cause the month picker to hide. The Month Picker has lots of options 
-for date validation, setting the start year, using an icon button, input masking, internationalization and localization and more.</p>
+for date validation, setting the start year, setting the earliest and latest date that can be picked,
+using an icon button, input masking, internationalization and localization and more.</p>
  
 -See a demo with unit tests running on jsFiddle at...
--http://jsfiddle.net/kidsysco/JeZap/ 
+-http://jsfiddle.net/rbate/L5qr28d0/
 
 <h2>Prerequisites</h2>
 <p>This plugin has been tested using the following configuration.</p>
@@ -129,6 +130,27 @@ $('.selector').MonthPicker('option', 'ShowIcon', false );
 </p>
 
 <p>
+    <h3>AlwaysShown</h3>
+    Type: Boolean<br />
+    Default: false<br />
+    Makes the picker visible on init instead of when the field/icon is clicked, and prevents it being hidden by either clicks outside the picker or when a month is selected.
+    This useful when the month field is hidden and/or when the form is automatically submitted on an OnAfterChooseMonth event.
+</p>
+<p>
+    Set the option upon init.
+    <pre>$('.selector').MonthPicker({ AlwaysShown: true });</pre>
+    
+    Get or set the option, after init. 
+<pre>
+//getter
+var disabled = $('.selector').MonthPicker('option', 'AlwaysShown');
+
+//setter
+$('.selector').MonthPicker('option', 'AlwaysShown', false );
+</pre>
+</p>
+
+<p>
     <h3>StartYear</h3>
     Type: Int<br />
     Default: Current Year<br />
@@ -145,6 +167,46 @@ var disabled = $('.selector').MonthPicker('option', 'StartYear');
 
 //setter
 $('.selector').MonthPicker('option', 'StartYear', false );
+</pre>
+</p>
+
+<p>
+    <h3>EarliestMonthSelectable</h3>
+    Type: String<br />
+    Default: Unrestricted<br />
+    Sets the earliest month that can be selected. Option can either be formatted as MM/YYYY, or as YYYY-MM with an optional, and ignored, -DD suffix.
+</p>
+<p>
+    Set the option upon init.
+    <pre>$('.selector').MonthPicker({ EarliestMonthSelectable: '2005-07-05' });</pre>
+    
+    Get or set the option, after init. 
+<pre>
+//getter
+var disabled = $('.selector').MonthPicker('option', 'EarliestMonthSelectable');
+
+//setter
+$('.selector').MonthPicker('option', 'EarliestMonthSelectable', '2005-07-05' );
+</pre>
+</p>
+
+<p>
+    <h3>LatestMonthSelectable</h3>
+    Type: String<br />
+    Default: Unrestricted<br />
+    Sets the latest month that can be selected. Option can either be formatted as MM/YYYY, or as YYYY-MM with an optional, and ignored, -DD suffix.
+</p>
+<p>
+    Set the option upon init.
+    <pre>$('.selector').MonthPicker({ LatestMonthSelectable: '2023-04-12' });</pre>
+    
+    Get or set the option, after init. 
+<pre>
+//getter
+var disabled = $('.selector').MonthPicker('option', 'LatestMonthSelectable');
+
+//setter
+$('.selector').MonthPicker('option', 'LatestMonthSelectable', '2023-04-12' );
 </pre>
 </p>
 
