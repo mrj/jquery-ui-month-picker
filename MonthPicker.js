@@ -441,8 +441,9 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             this._setPickerYear(_year);
 
             if (this._monthPickerMenu.css('display') === 'none') {
-                var _anchor = this.element.is(':visible') ? this.element : this.element.parent();
-                var _top = _anchor.offset().top + this.element.height() + 7;
+                var _fieldIsHidden = this.element.is(':hidden');
+                var _anchor = _fieldIsHidden ? this.element.parent() : this.element;
+                var _top = _anchor.offset().top + (_fieldIsHidden ? 0 : this.element.height() + 7);
                 var _left = _anchor.offset().left;
 
                 this._monthPickerMenu.css({
